@@ -7,4 +7,10 @@ export default class SectionController {
         const sections = await SectionService.getStandardSections();
         res.json(sections)
     }
+
+    static getSectionById = async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const section = await SectionService.getSectionById(Number(id))
+        res.json(section)
+    }
 }
