@@ -14,5 +14,19 @@ export default class ProductService {
         });
         return products;
     }
+
+    static getProducts = async () => {
+        const products = await this.prisma.product.findMany();
+        return products;
+    }
+
+    static getProductById = async (id: number) => {
+        const product = await this.prisma.product.findUnique({
+            where: {
+                id
+            }
+        })
+        return product;
+    }
 }
 
