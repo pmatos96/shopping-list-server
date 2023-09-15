@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client"
 import FieldUtils from "../utils/fieldUtils";
 
 type SectionData = {
+    id?: number;
     name: string;
     color: string;
 }
@@ -26,19 +27,57 @@ export default class SectionService {
         return section;
     }
 
-    static createSection = async (data: SectionData) => {
+    static createOrUpdateSection = async (data: SectionData) => {
 
-        const { name, color } = data;
+        const { name, color, id } = data;
 
+        await this.sectionDataStandardValidation(data);
+
+        if (id) {
+
+            const sectionExists = await this.prisma.section.count({
+                where: {
+                    id
+                }
+            }) > 0;
+
+            if (!sectionExists) {
+                throw `It was not possible to update section. The id ${id} does not exist.`;
+            }
+
+            const updatedSection = await this.prisma.section.update({
+                where: {
+                    id
+                },
+                data: {
+                    name,
+                    color
+                }
+            })
+
+            return updatedSection
+        }
+        else {
+            const newSection = await this.prisma.section.create({
+                data: {
+                    name,
+                    color
+                }
+            })
+            return newSection;
+        }
+    }
+
+    private static sectionDataStandardValidation = async (data: SectionData) => {
         let fieldsValidation = FieldUtils.validateRequiredFields(
             [
                 {
                     name: "name",
-                    value: name
+                    value: data.name
                 },
                 {
                     name: "color",
-                    value: color
+                    value: data.color
                 }
             ]
         );
@@ -47,20 +86,11 @@ export default class SectionService {
             throw fieldsValidation.errorMessage
         }
 
-        const nameAlreadyInUse = await this.isThereSectionWithSameName(name);
+        const nameAlreadyInUse = await this.isThereSectionWithSameName(data.name);
 
         if (nameAlreadyInUse) {
-            throw "It was not possible to create section. The name " + name + " is already in use.";
+            throw `It was not possible to ${data.id ? "update" : "create"} section. The name ${data.name} is already in use.`;
         }
-
-        const newSection = await this.prisma.section.create({
-            data: {
-                name,
-                color
-            }
-        })
-
-        return newSection;
     }
 
     private static async isThereSectionWithSameName(name: string) {

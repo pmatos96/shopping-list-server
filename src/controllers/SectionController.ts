@@ -38,12 +38,54 @@ export default class SectionController {
         }
 
         try {
-            const newSection = await SectionService.createSection({
+            const newSection = await SectionService.createOrUpdateSection({
                 name,
                 color
             })
 
             res.json(newSection);
+        }
+        catch (err) {
+            res.status(401).json({
+                message: err
+            })
+        }
+    }
+
+    static updateSection = async (req: Request, res: Response) => {
+        const { name, color, id } = req.body;
+
+        let fieldsValidation = FieldUtils.validateRequiredFields(
+            [
+                {
+                    name: "name",
+                    value: name
+                },
+                {
+                    name: "color",
+                    value: color
+                },
+                {
+                    name: "id",
+                    value: id
+                }
+            ]
+        );
+
+        if (!fieldsValidation.valid) {
+            res.status(401).json({
+                message: fieldsValidation.errorMessage
+            });
+        }
+
+        try {
+            const updatedSection = await SectionService.createOrUpdateSection({
+                name,
+                color,
+                id
+            })
+
+            res.json(updatedSection);
         }
         catch (err) {
             res.status(401).json({
