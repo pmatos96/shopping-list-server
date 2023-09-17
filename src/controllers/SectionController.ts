@@ -93,4 +93,12 @@ export default class SectionController {
             })
         }
     }
+
+    static deleteSectionById = async (req: Request, res: Response) => {
+        const { id } = req.params;
+        await SectionService.deleteSection(Number(id));
+        res.json({
+            message: "Section deleted successfully."
+        })
+    }
 }

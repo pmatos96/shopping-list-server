@@ -68,6 +68,14 @@ export default class SectionService {
         }
     }
 
+    static deleteSection = async (id: number) => {
+        await this.prisma.section.delete({
+            where: {
+                id
+            }
+        })
+    }
+
     private static sectionDataStandardValidation = async (data: SectionData) => {
         let fieldsValidation = FieldUtils.validateRequiredFields(
             [

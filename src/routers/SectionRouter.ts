@@ -7,5 +7,6 @@ sectionRouter.get('/', SectionController.listStandardSections);
 sectionRouter.get('/:id', SectionController.getSectionById);
 sectionRouter.post('/', SectionController.createSection);
 sectionRouter.put('/', SectionController.updateSection);
+sectionRouter.delete('/:id', SectionController.deleteSectionById);
 
 export default sectionRouter;
