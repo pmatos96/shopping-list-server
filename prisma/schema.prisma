@@ -18,13 +18,24 @@ model Section {
 }
 
 model Product {
-  id        Int     @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   name      String
-  section   Section @relation(fields: [sectionId], references: [id])
+  section   Section    @relation(fields: [sectionId], references: [id])
   sectionId Int
+  ListItem  ListItem[]
 }
 
 model ShoppingList {
-  id   Int    @id @default(autoincrement())
-  name String
+  id       Int        @id @default(autoincrement())
+  name     String
+  ListItem ListItem[]
+}
+
+model ListItem {
+  id             Int          @id @default(autoincrement())
+  shoppingList   ShoppingList @relation(fields: [shoppingListId], references: [id])
+  product        Product      @relation(fields: [productId], references: [id])
+  amount         Int
+  shoppingListId Int
+  productId      Int
 }
