@@ -91,4 +91,18 @@ export default class ShoppingListItemService {
             }
         })
     }
+
+    static deleteItemsByList = async (shoppingListId: number) => {
+        try {
+            let items = await this.getItemsByList(shoppingListId);
+
+            for (const item of items) {
+                await this.deleteItemById(item.id);
+            }
+
+        } catch (error) {
+            throw `Error deleting items: ${error}`;
+        }
+    }
+
 }

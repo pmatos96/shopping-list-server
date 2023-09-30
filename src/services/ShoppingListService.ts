@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import ShoppingListItemService from "./ShoppingListItemService";
 
 type ListData = {
     name: string;
@@ -69,6 +70,9 @@ export default class ShoppingListService {
     }
 
     static deleteList = async (id: number) => {
+
+        await ShoppingListItemService.deleteItemsByList(id);
+
         await this.prisma.shoppingList.delete({
             where: {
                 id
