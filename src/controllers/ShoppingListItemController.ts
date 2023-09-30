@@ -80,11 +80,25 @@ export default class ShoppingListItemController {
         }
 
         try {
-            const list = await ShoppingListItemService.updateItemAmount({
+            const listItem = await ShoppingListItemService.updateItemAmount({
                 amount,
                 id
             });
-            res.json(list);
+            res.json(listItem);
+        }
+        catch (err) {
+            res.status(401).json({
+                message: err
+            })
+        }
+    }
+
+    static setOrUnsetItemAsDone = async (req: Request, res: Response) => {
+        const { id } = req.params;
+
+        try {
+            const listItem = await ShoppingListItemService.setOrUnsetItemAsDone(Number(id));
+            res.json(listItem);
         }
         catch (err) {
             res.status(401).json({

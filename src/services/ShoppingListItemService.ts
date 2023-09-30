@@ -63,6 +63,26 @@ export default class ShoppingListItemService {
         return item;
     }
 
+    static setOrUnsetItemAsDone = async (id: number) => {
+
+        const oldItem = await this.getItemById(id);
+
+        if (!oldItem) {
+            throw `It was not possible to set or unset the item as done. The id ${id} does not exist.`
+        }
+
+        const updatedItem = await this.prisma.listItem.update({
+            where: {
+                id
+            },
+            data: {
+                done: !oldItem.done
+            }
+        })
+
+        return updatedItem;
+    }
+
     static deleteItemById = async (id: number) => {
 
         await this.prisma.listItem.delete({
