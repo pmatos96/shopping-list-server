@@ -7,6 +7,7 @@ const shoppingListRouter = Router();
 shoppingListRouter.get('/', ShoppingListController.getLists);
 shoppingListRouter.get('/:id', ShoppingListController.getListById);
 shoppingListRouter.post('/', ShoppingListController.createList);
+shoppingListRouter.post('/:id/duplicate', ShoppingListController.duplicateList);
 shoppingListRouter.put('/', ShoppingListController.updateList);
 shoppingListRouter.delete('/:id', ShoppingListController.deleteList);
 

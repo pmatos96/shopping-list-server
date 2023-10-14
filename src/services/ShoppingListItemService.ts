@@ -4,100 +4,114 @@ type NewListItem = {
     shoppingListId: number;
     productId: number;
     amount: number;
-}
+};
 
 type ListItem = {
     amount: number;
     id: number;
-}
+};
 
 export default class ShoppingListItemService {
-
     static prisma = new PrismaClient({
-        log: ["query"]
-    })
+        // log: ["query"],
+    });
 
     static getItemsByList = async (shoppingListId: number) => {
-
         const items = this.prisma.listItem.findMany({
             include: {
                 product: {
                     include: {
-                        section: true
-                    }
+                        section: true,
+                    },
                 },
             },
             where: {
-                shoppingListId
-            }
+                shoppingListId,
+            },
         });
 
         return items;
-    }
+    };
 
     static getItemById = async (id: number) => {
         const item = this.prisma.listItem.findUnique({
             where: {
-                id
-            }
-        })
+                id,
+            },
+        });
 
         return item;
-    }
+    };
 
     static createItem = async (data: NewListItem) => {
-
         const item = this.prisma.listItem.create({
-            data
-        })
+            data,
+        });
 
         return item;
-    }
+    };
+
+    static duplicateItemsByList = async (originListId: number, destinyListId: number) => {
+        const items = await this.getItemsByList(originListId);
+
+        for (const item of items) {
+
+            const { amount, productId } = item;
+
+            try {
+                await this.createItem({
+                    amount,
+                    productId,
+                    shoppingListId: destinyListId,
+                });
+            }
+            catch(err){
+                throw err
+            }
+        }
+    };
 
     static updateItemAmount = async (data: ListItem) => {
-
         const { id, amount } = data;
 
         const item = this.prisma.listItem.update({
             where: {
-                id
+                id,
             },
             data: {
-                amount
-            }
-        })
+                amount,
+            },
+        });
 
         return item;
-    }
+    };
 
     static setOrUnsetItemAsDone = async (id: number) => {
-
         const oldItem = await this.getItemById(id);
 
         if (!oldItem) {
-            throw `It was not possible to set or unset the item as done. The id ${id} does not exist.`
+            throw `It was not possible to set or unset the item as done. The id ${id} does not exist.`;
         }
 
         const updatedItem = await this.prisma.listItem.update({
             where: {
-                id
+                id,
             },
             data: {
-                done: !oldItem.done
-            }
-        })
+                done: !oldItem.done,
+            },
+        });
 
         return updatedItem;
-    }
+    };
 
     static deleteItemById = async (id: number) => {
-
         await this.prisma.listItem.delete({
             where: {
-                id
-            }
-        })
-    }
+                id,
+            },
+        });
+    };
 
     static deleteItemsByList = async (shoppingListId: number) => {
         try {
@@ -106,10 +120,8 @@ export default class ShoppingListItemService {
             for (const item of items) {
                 await this.deleteItemById(item.id);
             }
-
         } catch (error) {
             throw `Error deleting items: ${error}`;
         }
-    }
-
+    };
 }
