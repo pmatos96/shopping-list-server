@@ -20,6 +20,13 @@ export default class ShoppingListItemService {
     static getItemsByList = async (shoppingListId: number) => {
 
         const items = this.prisma.listItem.findMany({
+            include: {
+                product: {
+                    include: {
+                        section: true
+                    }
+                },
+            },
             where: {
                 shoppingListId
             }

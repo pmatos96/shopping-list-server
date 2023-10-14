@@ -17,13 +17,20 @@ export default class ProductService {
         const products = await this.prisma.product.findMany({
             where: {
                 sectionId
+            },
+            include: {
+                section: true
             }
         });
         return products;
     }
 
     static getProducts = async () => {
-        const products = await this.prisma.product.findMany();
+        const products = await this.prisma.product.findMany({
+            include: {
+                section: true
+            }
+        });
         return products;
     }
 
@@ -31,6 +38,9 @@ export default class ProductService {
         const product = await this.prisma.product.findUnique({
             where: {
                 id
+            },
+            include: {
+                section: true
             }
         })
         return product;

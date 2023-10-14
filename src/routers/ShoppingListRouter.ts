@@ -15,6 +15,6 @@ shoppingListRouter.get('/:shoppingListId/items', ShoppingListItemController.getL
 shoppingListRouter.post('/:shoppingListId/items', ShoppingListItemController.createItem);
 shoppingListRouter.put('/:shoppingListId/items', ShoppingListItemController.updateListItemAmount);
 shoppingListRouter.put('/:shoppingListId/items/:id/set-or-unset', ShoppingListItemController.setOrUnsetItemAsDone);
-shoppingListRouter.delete('/:shoppingListId/items', ShoppingListItemController.deleteListItem);
+shoppingListRouter.delete('/:shoppingListId/items/:id', ShoppingListItemController.deleteListItem);
 
 export default shoppingListRouter;
