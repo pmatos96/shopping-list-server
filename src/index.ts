@@ -11,7 +11,7 @@ const port = 3000;
 app.use(bodyParser.json());
 
 app.use(cors({
-    origin: /^https:\/\/([a-zA-Z0-9_-]+\.)?shopping-list-server-1w3v\.onrender\.com/, // Update with your frontend's URL
+    origin: "https://shopping-list-web-delta.vercel.app/", // Update with your frontend's URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // If you need to allow cookies or credentials
 }));
