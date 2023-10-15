@@ -11,7 +11,7 @@ const port = 3000;
 app.use(bodyParser.json());
 
 app.use(cors({
-    origin: 'http://localhost:3001', // Update with your frontend's URL
+    origin: process.env.FRONT_END_BASE_URL, // Update with your frontend's URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // If you need to allow cookies or credentials
 }));
