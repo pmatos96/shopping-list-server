@@ -11,7 +11,7 @@ const port = 3000;
 app.use(bodyParser.json());
 
 app.use(cors({
-    origin: ["https://shopping-list-server-1w3v.onrender.com/shopping-lists/"], // Update with your frontend's URL
+    origin: "*", // Update with your frontend's URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // If you need to allow cookies or credentials
 }));
