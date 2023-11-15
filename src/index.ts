@@ -20,6 +20,6 @@ app.use('/sections', sectionRouter);
 app.use('/products', productRouter);
 app.use('/shopping-lists', shoppingListRouter);
 
-app.listen(port, () => {
+app.listen(port,"0.0.0.0", () => {
     console.log(`Service is running on port ${port}`)
 })
