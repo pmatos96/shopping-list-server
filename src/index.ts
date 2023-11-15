@@ -21,5 +21,5 @@ app.use('/products', productRouter);
 app.use('/shopping-lists', shoppingListRouter);
 
 app.listen(port,"0.0.0.0", () => {
-    console.log(`Service is running on port ${port}`)
+    console.log(`Service is running on port ${process.env.PORT}`)
 })
