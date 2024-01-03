@@ -14,8 +14,12 @@ export default class ShoppingListService {
         // log: ["query"],
     });
 
-    static getLists = async () => {
-        const lists = await this.prisma.shoppingList.findMany();
+    static getListsByUserId = async (userId: string) => {
+        const lists = await this.prisma.shoppingList.findMany({
+            where:{
+                userId
+            }
+        });
         return lists;
     };
 

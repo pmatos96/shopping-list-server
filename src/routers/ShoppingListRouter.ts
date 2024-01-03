@@ -1,10 +1,11 @@
 import { Router } from "express";
 import ShoppingListController from "../controllers/ShopingListController";
 import ShoppingListItemController from "../controllers/ShoppingListItemController";
+import authUser from "../middlewares/authUser";
 
 const shoppingListRouter = Router();
 
-shoppingListRouter.get('/', ShoppingListController.getLists);
+shoppingListRouter.get('/', authUser, ShoppingListController.getListsByUser);
 shoppingListRouter.get('/:id', ShoppingListController.getListById);
 shoppingListRouter.post('/', ShoppingListController.createList);
 shoppingListRouter.post('/:id/duplicate', ShoppingListController.duplicateList);

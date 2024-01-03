@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
+import admin from 'firebase-admin';
 import ShoppingListService from "../services/ShoppingListService";
 import FieldUtils from "../utils/fieldUtils";
 
+interface UserRequest extends Request {
+    user?: admin.auth.DecodedIdToken;
+}
 export default class ShoppingListController {
     static getListById = async (req: Request, res: Response) => {
         const { id } = req.params;
@@ -11,9 +15,10 @@ export default class ShoppingListController {
         res.json(list);
     };
 
-    static getLists = async (req: Request, res: Response) => {
-        const lists = await ShoppingListService.getLists();
-        res.json(lists);
+    static getListsByUser = async (req: UserRequest, res: Response) => {
+        const uid = String(req.user?.uid);
+        const lists = await ShoppingListService.getListsByUserId(uid);
+        res.json({resp: lists, id: uid});
     };
 
     static createList = async (req: Request, res: Response) => {
