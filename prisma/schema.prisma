@@ -27,7 +27,7 @@ model Product {
 
 model ShoppingList {
   id       Int        @id @default(autoincrement())
-  userId   String?
+  userId   String
   name     String
   ListItem ListItem[]
 }

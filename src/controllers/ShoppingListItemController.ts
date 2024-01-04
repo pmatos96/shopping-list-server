@@ -39,7 +39,7 @@ export default class ShoppingListItemController {
         ]);
 
         if (!fieldsValidation.valid) {
-            res.status(401).json({
+            res.status(400).json({
                 message: fieldsValidation.errorMessage
             });
         }
@@ -53,7 +53,7 @@ export default class ShoppingListItemController {
             res.json(list);
         }
         catch (err) {
-            res.status(401).json({
+            res.status(500).json({
                 message: err
             })
         }
@@ -74,7 +74,7 @@ export default class ShoppingListItemController {
         ]);
 
         if (!fieldsValidation.valid) {
-            res.status(401).json({
+            res.status(400).json({
                 message: fieldsValidation.errorMessage
             });
         }
@@ -87,7 +87,7 @@ export default class ShoppingListItemController {
             res.json(listItem);
         }
         catch (err) {
-            res.status(401).json({
+            res.status(500).json({
                 message: err
             })
         }
@@ -101,7 +101,7 @@ export default class ShoppingListItemController {
             res.json(listItem);
         }
         catch (err) {
-            res.status(401).json({
+            res.status(500).json({
                 message: err
             })
         }

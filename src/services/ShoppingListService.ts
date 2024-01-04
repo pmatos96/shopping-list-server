@@ -8,6 +8,7 @@ type ListData = {
 
 type ListCreationData = {
     name: string;
+    userId: string;
 };
 export default class ShoppingListService {
     static prisma = new PrismaClient({
@@ -34,12 +35,9 @@ export default class ShoppingListService {
     };
 
     static createList = async (data: ListCreationData) => {
-        const { name } = data;
 
         const list = await this.prisma.shoppingList.create({
-            data: {
-                name,
-            },
+            data
         });
 
         return list;
@@ -82,7 +80,12 @@ export default class ShoppingListService {
     };
 
     static duplicateList = async (id: number, name: string) => {
-        const newList = await ShoppingListService.createList({ name });
+
+        const oldList = await ShoppingListService.getListById(id);
+        const newList = await ShoppingListService.createList({ 
+            name,
+            userId: oldList?.userId || ''
+        });
 
         try{
             await ShoppingListItemService.duplicateItemsByList(id, newList.id);

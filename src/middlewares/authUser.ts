@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import admin from 'firebase-admin';
+import { getAuth } from 'firebase-admin/auth';
 
 var serviceAccount = require("../../keys/serviceAccountKey");
 
@@ -20,9 +21,12 @@ const authUser = async (req: UserRequest, res: Response, next: NextFunction) => 
   }
 
   try {
-
-    const decodedToken = await admin.auth(app).verifyIdToken(token);
-    req.user = decodedToken;
+    console.log(token)
+    // const decodedToken = await admin.auth(app).verifyIdToken(token, false);
+    await getAuth(app).verifyIdToken(token).then((decodedToken) => {
+      req.user = decodedToken;
+    })
+    // req.user = decodedToken;
     next();
   } catch (error) {
     console.error('Error validating Firebase token:', error);

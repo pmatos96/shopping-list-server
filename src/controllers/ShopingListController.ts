@@ -7,9 +7,9 @@ interface UserRequest extends Request {
     user?: admin.auth.DecodedIdToken;
 }
 export default class ShoppingListController {
-    static getListById = async (req: Request, res: Response) => {
+    static getListById = async (req: UserRequest, res: Response) => {
         const { id } = req.params;
-
+        console.log(id)
         const list = await ShoppingListService.getListById(Number(id));
 
         res.json(list);
@@ -21,8 +21,9 @@ export default class ShoppingListController {
         res.json({resp: lists, id: uid});
     };
 
-    static createList = async (req: Request, res: Response) => {
+    static createList = async (req: UserRequest, res: Response) => {
         const { name } = req.body;
+        const userId = String(req.user?.uid);
 
         let fieldsValidation = FieldUtils.validateRequiredFields([
             {
@@ -32,7 +33,7 @@ export default class ShoppingListController {
         ]);
 
         if (!fieldsValidation.valid) {
-            res.status(401).json({
+            res.status(400).json({
                 message: fieldsValidation.errorMessage,
             });
         }
@@ -40,10 +41,11 @@ export default class ShoppingListController {
         try {
             const list = await ShoppingListService.createList({
                 name,
+                userId
             });
             res.json(list);
         } catch (err) {
-            res.status(401).json({
+            res.status(500).json({
                 message: err,
             });
         }
@@ -62,7 +64,7 @@ export default class ShoppingListController {
         ]);
 
         if (!fieldsValidation.valid) {
-            res.status(401).json({
+            res.status(400).json({
                 message: fieldsValidation.errorMessage,
             });
         }
@@ -74,7 +76,7 @@ export default class ShoppingListController {
             );
             res.json(list);
         } catch (err) {
-            res.status(401).json({
+            res.status(500).json({
                 message: err,
             });
         }
@@ -95,7 +97,7 @@ export default class ShoppingListController {
         ]);
 
         if (!fieldsValidation.valid) {
-            res.status(401).json({
+            res.status(400).json({
                 message: fieldsValidation.errorMessage,
             });
         }
@@ -107,7 +109,7 @@ export default class ShoppingListController {
             });
             res.json(list);
         } catch (err) {
-            res.status(401).json({
+            res.status(500).json({
                 message: err,
             });
         }

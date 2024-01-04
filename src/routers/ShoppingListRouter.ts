@@ -6,11 +6,11 @@ import authUser from "../middlewares/authUser";
 const shoppingListRouter = Router();
 
 shoppingListRouter.get('/', authUser, ShoppingListController.getListsByUser);
-shoppingListRouter.get('/:id', ShoppingListController.getListById);
-shoppingListRouter.post('/', ShoppingListController.createList);
-shoppingListRouter.post('/:id/duplicate', ShoppingListController.duplicateList);
-shoppingListRouter.put('/', ShoppingListController.updateList);
-shoppingListRouter.delete('/:id', ShoppingListController.deleteList);
+shoppingListRouter.get('/:id', authUser, ShoppingListController.getListById);
+shoppingListRouter.post('/', authUser, ShoppingListController.createList);
+shoppingListRouter.post('/:id/duplicate', authUser, ShoppingListController.duplicateList);
+shoppingListRouter.put('/', authUser, ShoppingListController.updateList);
+shoppingListRouter.delete('/:id', authUser, ShoppingListController.deleteList);
 
 shoppingListRouter.get('/:shoppingListId/items/:id', ShoppingListItemController.getItemById);
 shoppingListRouter.get('/:shoppingListId/items', ShoppingListItemController.getListItems);

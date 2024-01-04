@@ -47,7 +47,7 @@ export default class ProductController {
         );
 
         if (!fieldsValidation.valid) {
-            res.status(401).json({
+            res.status(400).json({
                 message: fieldsValidation.errorMessage
             });
         }
@@ -61,7 +61,7 @@ export default class ProductController {
             res.json(newProduct);
         }
         catch (err) {
-            res.status(401).json({
+            res.status(500).json({
                 message: err
             })
         }
@@ -88,7 +88,7 @@ export default class ProductController {
         );
 
         if (!fieldsValidation.valid) {
-            res.status(401).json({
+            res.status(400).json({
                 message: fieldsValidation.errorMessage
             });
         }
@@ -103,7 +103,7 @@ export default class ProductController {
             res.json(updatedProduct);
         }
         catch (err) {
-            res.status(401).json({
+            res.status(500).json({
                 message: err
             })
         }
