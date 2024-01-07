@@ -4,11 +4,13 @@ type NewListItem = {
     shoppingListId: number;
     productId: number;
     amount: number;
+    observation?: string;
 };
 
-type ListItem = {
-    amount: number;
+type UpdatingListItem = {
+    amount?: number;
     id: number;
+    observation?: string;
 };
 
 export default class ShoppingListItemService {
@@ -71,16 +73,24 @@ export default class ShoppingListItemService {
         }
     };
 
-    static updateItemAmount = async (data: ListItem) => {
-        const { id, amount } = data;
+    static updateItem = async (data: UpdatingListItem) => {
+        const { id, observation, amount } = data;
+
+        let payload: {observation?: string, amount?: number} = {}
+
+        if(observation){
+            payload.observation = observation;
+        }
+
+        if(amount){
+            payload.amount = amount;
+        }
 
         const item = this.prisma.listItem.update({
             where: {
                 id,
             },
-            data: {
-                amount,
-            },
+            data: payload,
         });
 
         return item;

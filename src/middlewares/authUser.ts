@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import admin from 'firebase-admin';
 import { getAuth } from 'firebase-admin/auth';
+import { env } from "process";
 
 var serviceAccount = require("../../keys/serviceAccountKey");
 
@@ -9,7 +10,8 @@ interface UserRequest extends Request {
 }
 
 const app = admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "../../prisma/dev.db"
 })
 
 const authUser = async (req: UserRequest, res: Response, next: NextFunction) => {
@@ -21,12 +23,11 @@ const authUser = async (req: UserRequest, res: Response, next: NextFunction) => 
   }
 
   try {
-    console.log(token)
-    // const decodedToken = await admin.auth(app).verifyIdToken(token, false);
-    await getAuth(app).verifyIdToken(token).then((decodedToken) => {
-      req.user = decodedToken;
-    })
-    // req.user = decodedToken;
+    const decodedToken = await admin.auth().verifyIdToken(token, false);
+    // await getAuth(app).verifyIdToken(token, true).then((decodedToken) => {
+    //   req.user = decodedToken;
+    // })
+    req.user = decodedToken;
     next();
   } catch (error) {
     console.error('Error validating Firebase token:', error);

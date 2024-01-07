@@ -38,6 +38,7 @@ model ListItem {
   shoppingList   ShoppingList @relation(fields: [shoppingListId], references: [id])
   product        Product      @relation(fields: [productId], references: [id])
   amount         Int
+  observation    String?
   shoppingListId Int
   productId      Int
 }

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import ShoppingListItemService from "../services/ShoppingListItemService";
 import FieldUtils from "../utils/fieldUtils";
-
+import admin from 'firebase-admin';
 export default class ShoppingListItemController {
 
     static getItemById = async (req: Request, res: Response) => {
@@ -21,7 +21,7 @@ export default class ShoppingListItemController {
     }
 
     static createItem = async (req: Request, res: Response) => {
-        const { productId, amount, shoppingListId } = req.body;
+        const { productId, amount, shoppingListId, observation } = req.body;
 
         let fieldsValidation = FieldUtils.validateRequiredFields([
             {
@@ -48,7 +48,8 @@ export default class ShoppingListItemController {
             const list = await ShoppingListItemService.createItem({
                 productId,
                 shoppingListId,
-                amount
+                amount,
+                observation
             });
             res.json(list);
         }
@@ -59,17 +60,13 @@ export default class ShoppingListItemController {
         }
     }
 
-    static updateListItemAmount = async (req: Request, res: Response) => {
-        const { amount, id } = req.body;
+    static updateListItem = async (req: Request, res: Response) => {
+        const { amount, observation , id } = req.body;
 
         let fieldsValidation = FieldUtils.validateRequiredFields([
             {
                 name: "id",
                 value: id
-            },
-            {
-                name: "amount",
-                value: amount
             }
         ]);
 
@@ -79,11 +76,25 @@ export default class ShoppingListItemController {
             });
         }
 
+        if(![amount, observation].some(item => !!item)){
+            res.status(400).json({
+                message: "To update list item, must be passed at least 'amount' or 'observation' parameters"
+            })
+        }
+
         try {
-            const listItem = await ShoppingListItemService.updateItemAmount({
-                amount,
-                id
-            });
+
+            let payload: {id: number, amount?: number, observation?: string} = { id };
+
+            if(amount){
+                payload.amount = amount;
+            }
+
+            if(observation){
+                payload.observation = observation
+            }
+
+            const listItem = await ShoppingListItemService.updateItem(payload);
             res.json(listItem);
         }
         catch (err) {
